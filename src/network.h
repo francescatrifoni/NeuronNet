@@ -1,6 +1,7 @@
 #include "globals.h"
 #include "neuron.h"
 
+
 /*! \class Network
   A neuron network is a \ref neurons "set" of neurons and a \ref links "set" of directional links between them.
 
@@ -79,7 +80,7 @@ public:
   \param n : the index of the receiving neuron.
   \return a pair {number of connections, sum of link intensities}.
  */
-    std::pair<size_t, double> degree(const size_t&) const;
+    std::pair<size_t, double> degree(const size_t& n) const;
     const Neuron& neuron(const size_t n) const {return neurons.at(n);}
 /*! 
   Finds the list of neurons with incoming connections to \p n.
@@ -100,6 +101,11 @@ public:
                     std::ostream *_out=&std::cout);
     void print_head(const std::map<std::string, size_t>&, 
                     std::ostream *_out=&std::cout);
+    
+    
+                   
+                    
+                    
 
 private:
     std::vector<Neuron> neurons;

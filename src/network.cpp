@@ -1,5 +1,110 @@
 #include "network.h"
-#include "random.h"
+
+
+
+//Calculates the number and total intensity of connections to neuron \p n.
+  //\param n : the index of the receiving neuron. n==link.first.second
+  //\return a pair {number of connections, sum of link intensities}.
+  // appel: link.first , link.second, link.first.first ect...
+ //link = std::pair<const std::pair<long unsigned int, long unsigned int> double>; // pair2=(premier int # neuron1, 2eme int # neuron2) , pair1=(pair2, intensité)
+
+
+std::pair<size_t, double> Network::degree(const size_t& n) const
+{ 
+	 	size_t nbr_connections(neighbors(n).size());
+		double intensity_sum(0.0);
+	 
+	 for (auto& links : neighbors(n)){
+		
+			 intensity_sum += links.second;
+		 
+	 } 
+ std::pair<size_t, double> paire (nbr_connections, intensity_sum);
+ return paire;
+ }
+
+//firing je le reset mais stock les valeur-etat
+// distinction entre inhib et exitateur et voir si ils sont firing avant de sommer leur intensité. Pour les neurones voisins.
+
+
+
+ //Performs one time-step of the simulation.
+  //\param input : a vector of random values as thalamic input, one value for each neuron. The variance of these values corresponds to excitatory neurons.
+  //\return the indices of firing neurons
+  //variance de vect[i] = w du pdf
+  
+std::set<size_t> Network::step(const std::vector<double>& thalam)
+{  
+  std::set<size_t> firing;
+  std::vector<bool> firing_stock(neurons.size());
+  
+  double I, sum_inhib,sum_ex;
+  
+  for(size_t i(0); i < neurons.size(); i++){ //itere sur le vect de neurones
+	  
+	  if(neurons[i].firing()){
+		  firing.insert(i);
+		  firing_stock.push_back(true); //si il est firing je le stock et le reset
+		  neurons[i].reset(); 
+			
+		}
+		else{
+			firing_stock.push_back(false);
+		}
+		
+		
+		for (auto& links : neighbors(i)){
+			
+				if(firing_stock[links.first]){
+					
+					if (neurons[links.first].is_inhibitory ())	// on ajoute soutrait de intensity_sum 
+					{
+						sum_inhib += links.second;
+					}
+					else { 													// on ajoute 0.5 intensity_sum de I
+						sum_ex += links.second;
+					} 
+				}
+		} 
+		
+		
+		  if (neurons[i].is_inhibitory()){
+			  
+			I = 0.4*thalam[i] - sum_inhib + 0.5*sum_ex; //on ajoute parce que askip c'est deja negatif
+			
+		}else {
+			I = thalam[i] - sum_inhib + 0.5*sum_ex;
+			}
+		
+		neurons[i].input(I);
+		neurons[i].step();
+		
+	}
+ 
+  return firing;
+}
+
+
+ //Finds the list of neurons with incoming connections to \p n.
+  //\param n : the index of the receiving neuron. n==link.first.second
+  //\return a vector of pairs {neuron index, link intensity}
+
+std::vector<std::pair<size_t, double> > Network::neighbors(const size_t& n) const
+{
+  std::pair<size_t, double> index_intens;
+  std::vector<std::pair<size_t, double> > neighb;
+  
+  for (auto i: links){
+	  if (n == i.first.first){
+		 
+		  index_intens.first = i.first.second;
+		  index_intens.second = i.second;
+		  neighb.push_back(index_intens);
+	  }  
+  }
+  
+  return neighb;
+}
 
 void Network::resize(const size_t &n, double inhib) {
     size_t old = size();

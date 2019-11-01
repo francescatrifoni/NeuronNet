@@ -1,5 +1,5 @@
 #include "simulation.h"
-#include "random.h"
+
 
 /*!
   \mainpage %Neuron network dynamics

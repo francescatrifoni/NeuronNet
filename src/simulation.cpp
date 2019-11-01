@@ -1,5 +1,5 @@
+
 #include "globals.h"
-#include "random.h"
 #include "simulation.h"
 
 Simulation::Simulation(int argc, char **argv) {

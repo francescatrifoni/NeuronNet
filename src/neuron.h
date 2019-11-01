@@ -1,4 +1,5 @@
 #include "globals.h"
+#include "random.h"
 
 /*! \class Neuron
   A neuron type is defined by four parameters \p a, \p b, \p c, \p d, and the "inhibitory" or "excitatory" quality. 
@@ -67,6 +68,7 @@ private:
 /*! @name Neuron parameters 
   \p a, \p b, \p c, \p d, and the boolean \p inhib if neuron is inhibitory.
  */
+
     NeuronParams params;
 /*! @name Reference to the neuron type 
   This is an iterator to the relevant element of Neuron::NeuronTypes.

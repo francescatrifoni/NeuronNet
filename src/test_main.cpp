@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <algorithm>
-#include "random.h"
 #include "simulation.h"
 
 RandomNumbers *_RNG = new RandomNumbers(101301091);

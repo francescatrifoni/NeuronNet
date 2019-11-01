@@ -1,6 +1,7 @@
 #include "network.h"
 #include <tclap/CmdLine.h>
 
+
 /*! \class Simulation
   This is the main class. 
   It manages user inputs, defines the simulation parameters and constructs the \ref Network \ref net.
